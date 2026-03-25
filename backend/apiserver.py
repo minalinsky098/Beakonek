@@ -77,7 +77,7 @@ async def register_user(payload: RegisterPayload, db_client: AsyncClient = Depen
         "otp_code": otp,
         "purpose":"registration",
         }
-        await delete_existing_otp(payload, db_client)
+        await delete_existing_otp(payload.mobile_number, db_client)
         db_response = await db_client.table("otp_verifications").insert(db_payload).execute()
         
     except Exception as e:
