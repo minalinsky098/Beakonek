@@ -5,6 +5,7 @@ from supabase import acreate_client, AsyncClient
 from dotenv import load_dotenv
 from utils import generate_otp
 from database import clean_up_expired_otp, delete_existing_otp
+from auth import checkOTP
 import os
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -86,8 +87,12 @@ async def register_user(payload: RegisterPayload, db_client: AsyncClient = Depen
 
 #TODO CREATE A CHECKOTP ENDPOINT
 @app.post("/api/v1/checkOTP")
-async def auth_otp(payload, auth_client: AsyncClient = Depends(get_auth_client)):
-    pass
+async def auth_otp(payload:AuthOTPPayload, db_client: AsyncClient = Depends(get_db_client)):
+    try:
+        isvalid = await checkOTP(payload.mobile_number, payload.purpose,payload.otp,db_client)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="OTP not found")
+    print(isvalid)
 
 #TODO CREATE A LOGIN ENDPOINT
 @app.post("/api/v1/loginuser")
