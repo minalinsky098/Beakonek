@@ -1,7 +1,6 @@
 import secrets
 import httpx
 import os
-from datetime import datetime, timezone
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,9 +31,3 @@ async def send_otp_sms(mobile_number: str, otp: str):
     except Exception as e:
         raise Exception 
     
-#scheduler to cleanup expired otp
-async def clean_up_expired_otp(db_client):
-    try:
-        await db_client.table("otp_verifications").delete().lt("expires_at", datetime.now(timezone.utc).isoformat()).execute()
-    except Exception as e:
-        print("An error happened",e)

@@ -3,7 +3,8 @@ from contextlib import asynccontextmanager
 from pydantic import BaseModel, field_validator
 from supabase import acreate_client, AsyncClient
 from dotenv import load_dotenv
-from utils import generate_otp, clean_up_expired_otp
+from utils import generate_otp
+from database import clean_up_expired_otp
 import os
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
