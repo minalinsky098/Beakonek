@@ -58,7 +58,7 @@ const handleAuthOTP = async () => {
             <View className="flex-[6] bg-[#3723A9]"></View>
 
          <View className="rounded-[28px] flex-[4] bg-[#F5F5F5] p-10 -mt-16">
-            <Text className="text-2xl font-bold mb-6 ">Sign up</Text>
+            <Text className="text-2xl font-bold mb-6 ">Log in</Text>
             <Text className="mb-3">Phone Number</Text>
             <TextInput placeholder="639xxxxxxxxx"
             className="bg-[#D9D9D9] rounded-[8px] p-4 border border-[#737373] mb-3"
