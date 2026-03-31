@@ -44,8 +44,8 @@ async def get_user(mobile_number: str, db_client):
     return res.data[0]["user_id"]
  
 #UPDATE ============================================================================  
-async def add_location(longitude: float, latitude: float, user_id:str, db_client):
-    db_payload = {"longitude": longitude, "latitude": latitude}
+async def add_location(latitude: float, longitude: float, user_id: str, db_client):
+    db_payload = {"latitude": latitude, "longitude": longitude}
     await db_client.table("users").update(db_payload).eq("user_id", user_id).execute()
 
 #DELETE====================================================================================
