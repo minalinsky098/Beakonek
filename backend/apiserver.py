@@ -63,11 +63,16 @@ async def get_db_client(request: Request):
     return request.app.state.db_client
 async def get_auth_client(request: Request):
     return request.app.state.auth_client
-async def get_current_user(session_id = Header(), db_client = Depends(get_db_client)):
+async def get_current_user(authorization: str = Header(), db_client = Depends(get_db_client)):
     try:
+        if not authorization or not authorization.startswith("Bearer "):
+            raise HTTPException(status_code=401, detail="Invalid or missing Authorization header")
+        session_id = authorization.split(" ")[1]
         current_user = await get_session(session_id, db_client)
     except SessionNotFoundError as e: 
         raise HTTPException(status_code = 401, detail=str(e))
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code= 500, detail=str(e))
     return current_user
@@ -88,10 +93,10 @@ async def request_OTP(payload: RequestOTPPayload, db_client = Depends(get_db_cli
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=e)
+        raise HTTPException(status_code=500, detail=str(e))
     return {"message":f"OTP is sent to your number: +({payload.mobile_number})"}
 
-@app.post("/api/v1/otp/verifications")
+@app.post("/api/v1/otp/authentications")
 async def auth_otp(payload:AuthOTPPayload, db_client: AsyncClient = Depends(get_db_client)):
     try:
         isvalid = await checkOTP(payload.mobile_number, payload.purpose,payload.otp,db_client)
@@ -114,14 +119,14 @@ async def auth_otp(payload:AuthOTPPayload, db_client: AsyncClient = Depends(get_
     
 @app.post("/api/v1/relatives")
 async def add_relatives(payload: RelativesPayload, db_client = Depends(get_db_client), user_id = Depends(get_current_user)):
-    pass 
+    raise HTTPException(501, detail="Not done yet")
     
 @app.patch("/api/v1/location")
 async def update_location(payload: LocationPayload, db_client = Depends(get_db_client), user_id = Depends(get_current_user)):
     await add_location(payload.longitude, payload.latitude, user_id, db_client)
     return {"message":f"Users location has been updated"}
     
-@app.delete("/api/v1/logout")
+@app.post("/api/v1/logout")
 async def logout(current_user = Depends(get_current_user), db_client = Depends(get_db_client)):
     await logout_user(current_user, db_client)
     return {"detail": "User logged out"}
