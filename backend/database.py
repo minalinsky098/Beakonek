@@ -6,7 +6,7 @@ class DuplicateMobileError(Exception):
 class SessionNotFoundError(Exception):
     pass
 
-#CREATE   
+#CREATE
 async def add_user_to_database(mobile_number, db_client):
     try: 
         db_payload = {
@@ -16,7 +16,7 @@ async def add_user_to_database(mobile_number, db_client):
     except Exception as e:
         raise DuplicateMobileError("Mobile number already in database")
  
-#READ
+#READ ==================================================================================
 async def get_session(session_id: str, db_client):
     res = await db_client.table("sessions").select().eq("session_id", session_id).execute()
     if not res.data:
@@ -27,7 +27,7 @@ async def get_user(mobile_number: str, db_client):
     res = await db_client.table("users").select().eq("mobile_number", mobile_number).execute()
     return res.data[0]["user_id"]
  
-#UPDATE   
+#UPDATE ============================================================================  
 async def insert_otp_entry(mobile_number: str, otp:str, purpose:str, db_client):
     db_payload = {
         "mobile_number":mobile_number,
@@ -44,7 +44,7 @@ async def insert_session(user_id:str, token:str, db_client):
     }
     await db_client.table("sessions").insert(db_payload).execute()
 
-#DELETE
+#DELETE====================================================================================
 async def logout_user(user_id: str, db_client):
     await db_client.table("sessions").delete().eq("user_id", user_id).execute()
     
