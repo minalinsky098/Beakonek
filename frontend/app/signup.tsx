@@ -1,7 +1,8 @@
 import { useState } from "react";
-import {View, Text, TextInput, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity,Platform} from 'react-native';
 import { useRouter } from 'expo-router';
-import { Eye, EyeOff } from 'react-native-feather';
+import { KeyboardAvoidingView, KeyboardProvider } from "react-native-keyboard-controller";
+
 
 
 export default function LoginScreen ()
@@ -45,6 +46,13 @@ const handleAuthOTP = async () => {
 
     return (
       
+        <KeyboardProvider>
+
+          <KeyboardAvoidingView 
+          style={{ flex: 1 }} 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          >
+
          <View className="flex-1"> 
             <View className="flex-[6] bg-[#3723A9]"></View>
 
@@ -90,6 +98,10 @@ const handleAuthOTP = async () => {
          
          
          </View>
+
+         </KeyboardAvoidingView>
+
+      </KeyboardProvider>
       
     );
 }
