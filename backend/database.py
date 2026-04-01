@@ -15,7 +15,7 @@ def catch_database_error(func):
         except DatabaseError:
             raise
         except Exception as e:
-            raise DatabaseError(e)  
+            raise DatabaseError(e) from e 
     return wrapper
 
 #CREATE

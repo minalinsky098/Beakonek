@@ -64,7 +64,7 @@ async def get_db_client(request: Request):
     return request.app.state.db_client
 async def get_auth_client(request: Request):
     return request.app.state.auth_client
-async def get_current_usersession(authorization: HTTPAuthorizationCredentials = Depends(HTTPBearer()), db_client = Depends(get_db_client)):
+async def get_current_usersession(authorization: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)), db_client = Depends(get_db_client)):
     try:
         session_id = authorization.credentials
         current_user = await get_session(session_id, db_client)
