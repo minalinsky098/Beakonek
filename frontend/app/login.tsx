@@ -2,7 +2,7 @@ import { useState } from "react";
 import {View, Text, TextInput, TouchableOpacity,Platform} from 'react-native';
 import { useRouter } from 'expo-router';
 import { KeyboardAvoidingView, KeyboardProvider } from "react-native-keyboard-controller";
-import { Phone } from 'lucide-react-native';
+
 
 
 
