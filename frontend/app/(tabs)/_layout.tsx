@@ -41,7 +41,7 @@ export default function TabLayout() {
         headerTitle: 'New Contacts',
         headerTitleAlign: 'center',
         headerRight: () => (
-          <TouchableOpacity onPress={() => router.push('./Home')} className="mr-4 w-10 h-10 border-2 border-orange-500 rounded-full items-center justify-center">
+          <TouchableOpacity onPress={() => router.push('./home')} className="mr-4 w-10 h-10 border-2 border-orange-500 rounded-full items-center justify-center">
             <Check size={20} color="#FF6B35" />
           </TouchableOpacity>
         ),

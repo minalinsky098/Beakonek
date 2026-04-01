@@ -16,12 +16,14 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-       <ImageBackground 
+    
+     <ImageBackground 
         source={require('../assets/images/background-image.jpg')}
         style={{ flex: 1 }}
         imageStyle={{ opacity: 0.2}}
-      ></ImageBackground>
-      <Stack initialRouteName='(tabs)'
+      >
+
+      <Stack initialRouteName='welcome'
              screenOptions={{
               animation: 'slide_from_bottom',
             }}
@@ -35,6 +37,8 @@ export default function RootLayout() {
       
       </Stack>
       <StatusBar style="auto" />
+
+    </ImageBackground>
     </ThemeProvider>
   );
 }

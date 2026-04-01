@@ -14,7 +14,7 @@ export default function IntroScreen()
           <Image 
             source={require('../../assets/images/background-image.jpg')}
             className="absolute w-full h-full opacity-20"/>
-          <Text className="text-2xl font-bold text-white mt-10 mx-6 mb-3">Manage Contacts</Text>
+          <Text className="text-2xl font-bold text-white mt-10 mx-6 mb-6">Manage Contacts</Text>
           <KeyboardProvider>
 
         <KeyboardAvoidingView 
