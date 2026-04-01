@@ -1,9 +1,11 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { router } from 'expo-router';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { Colors } from '@/constants/theme';
-import { House, UserPlus, Users, Menu} from 'lucide-react-native';
+import { House, UserPlus, Users, Menu, Check} from 'lucide-react-native';
 
 
 export default function TabLayout() {
@@ -35,6 +37,14 @@ export default function TabLayout() {
        options={{
         title: 'Add Contact',
         tabBarIcon: ({ color }) => <UserPlus color={color} size={24} />,
+        headerShown: true,
+        headerTitle: 'New Contacts',
+        headerTitleAlign: 'center',
+        headerRight: () => (
+          <TouchableOpacity onPress={() => router.push('./Home')} className="mr-4 w-10 h-10 border-2 border-orange-500 rounded-full items-center justify-center">
+            <Check size={20} color="#FF6B35" />
+          </TouchableOpacity>
+        ),
        }}
        />
 

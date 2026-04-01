@@ -14,7 +14,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <Stack initialRouteName='signup'
+      <Stack initialRouteName='(tabs)'
              screenOptions={{
               animation: 'slide_from_bottom',
             }}
