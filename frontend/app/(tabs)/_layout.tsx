@@ -3,7 +3,7 @@ import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { Colors } from '@/constants/theme';
-import { House, UserPlus, Users,Menu } from 'lucide-react-native';
+import { House, UserPlus, Users, Menu} from 'lucide-react-native';
 
 
 export default function TabLayout() {
