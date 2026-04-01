@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import "../global.css";
 import * as SystemUI from 'expo-system-ui';
+import { ImageBackground, View } from 'react-native';
 
 SystemUI.setBackgroundColorAsync('#3723A9');
 
@@ -14,6 +15,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
+  
       <Stack initialRouteName='welcome'
              screenOptions={{
               animation: 'slide_from_bottom',
@@ -29,6 +31,8 @@ export default function RootLayout() {
         
       
       </Stack>
+      
+     
       <StatusBar style="auto" />
     </ThemeProvider>
   );

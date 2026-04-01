@@ -80,7 +80,7 @@ const handleAuthOTP = async () => {
          
 
     
-            <TouchableOpacity onPress={handleRequestOTP}
+            <TouchableOpacity onPress={()=> router.replace('/(tabs)/home')}
             className="bg-[#FF6B2C] p-5 rounded-[25px] mb-4">
                 <Text className="text-center text-white">Send OTP</Text>
             </TouchableOpacity>
