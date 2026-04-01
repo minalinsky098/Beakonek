@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {View, Text, TextInput, TouchableOpacity, ActivityIndicator, Image} from 'react-native';
 import { User, Bell } from 'lucide-react-native';
+import EarthquakeCard from "@/components/earthquake-card";
 
 
 export default function Home ()
@@ -9,17 +10,12 @@ export default function Home ()
     <View className="flex-1"> 
             <View className="flex-[6] bg-[#3723A9] justify-center items-center">
 
-
                 <Image 
                 source={require('../../assets/images/background-image.jpg')}
                 className="absolute w-full h-full opacity-20 z-0"
                 />
 
-                <View className="bg-[#FFFFFF] rounded-[15px] self-stretch mx-8 h-[60%] mb-4 z-10 p-6">
-                  <Text>Earthquake Card</Text>
-                </View>
-
-                
+                <EarthquakeCard/>
 
             </View>
             
