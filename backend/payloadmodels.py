@@ -3,6 +3,8 @@ class AuthOTPPayload(BaseModel):
     mobile_number: str
     purpose: str
     otp: str
+    first_name: str | None = None
+    last_name: str | None = None
     
     @field_validator("mobile_number")
     @classmethod
@@ -58,6 +60,10 @@ class RelativesPayload(BaseModel):
     @classmethod
     def check_digits(cls, v):
         return validate_mobile_number(v)
+ 
+class UpdateNamePayload(BaseModel):
+    first_name: str
+    last_name: str
     
 def validate_mobile_number(mobile_number):
     mobile_number = mobile_number.strip()

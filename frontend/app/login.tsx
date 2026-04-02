@@ -2,6 +2,8 @@ import { useState } from "react";
 import {View, Text, TextInput, TouchableOpacity,Platform, Image} from 'react-native';
 import { useRouter } from 'expo-router';
 import { KeyboardAvoidingView, KeyboardProvider } from "react-native-keyboard-controller";
+import Otp from "./otp";
+
 
 
 
@@ -11,11 +13,13 @@ export default function LoginScreen ()
 {
 const router = useRouter();
 const [phoneNumber, setPhoneNumber] = useState('');
-const [otp, setOtp] = useState('');
+const [otp, setOtp] = useState(''); //idk san to ginamit gawa nalang ako ng akin hahahahah 
+const [showotp, setShowOtp] = useState(false);
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState('');
 const [result, setResult] = useState('');
 const [registered,setRegistered] = useState('');
+
 
 const handleRequestOTP = async () => {
   try {
@@ -85,10 +89,14 @@ const handleAuthOTP = async () => {
          
 
     
-            <TouchableOpacity onPress={()=> router.replace('/(tabs)/home')}
+            <TouchableOpacity onPress={()=> setShowOtp(true)}
             className="bg-[#FF6B2C] p-5 rounded-[25px] mb-4">
                 <Text className="text-center text-white">Send OTP</Text>
             </TouchableOpacity>
+
+            <Otp
+              visible={showotp} 
+              onClose={() => setShowOtp(false)}/>
 
              <TouchableOpacity onPress={()=> router.replace('/signup')}
             className="bg-[#FFFFF] p-5 rounded-[25px] border border-[#737373]">

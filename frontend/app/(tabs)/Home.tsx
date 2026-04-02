@@ -38,7 +38,7 @@ export default function Home ()
                 </View>
 
 
-                <View className="flex-[9]">
+                <View className="flex-[8] mt-6">
                   <View className="flex-row gap-2 items-center" >
                     <Bell size={30}/>
                     <Text className="text-2xl font-bold p-2">Logs</Text>
