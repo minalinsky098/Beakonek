@@ -161,8 +161,8 @@ async def add_relatives(payload: RelativesPayload, db_client = Depends(get_db_cl
 @app.put("/api/v1/relatives/{relative_id}")
 async def update_relative(payload: RelativesPayload,relative_id:UUID, db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
     try:
-        res = await update_relatives(user_id, relative_id,payload.relative_name, payload.relative_number,db_client)
-        return res.data[0]
+        res = await update_relatives(user_id, str(relative_id),payload.relative_name, payload.relative_number,db_client)
+        return res
     except RelativeNotFoundError:
         raise HTTPException(404, detail="Relative not found")
     except DatabaseError as e:
@@ -189,7 +189,7 @@ async def update_user_name(payload:UpdateNamePayload, db_client = Depends(get_db
 @app.delete("/api/v1/relatives/{relative_id}")
 async def delete_relative(relative_id:UUID, db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
     try:
-        await delete_relatives(user_id, relative_id,db_client)
+        await delete_relatives(user_id, str(relative_id),db_client)
         return Response(status_code=204)
     except RelativeNotFoundError:
         raise HTTPException(404, detail="Relative not found")

@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-from uuid import UUID
 
 class DatabaseError(Exception):
     pass
@@ -134,7 +133,7 @@ async def update_coordinates(latitude: float, longitude: float, user_id: str, db
     await db_client.table("users").update(db_payload).eq("user_id", user_id).execute()
 
 @catch_database_error
-async def update_relatives(user_id: str, relative_id: UUID, relative_name:str, mobile_number: str,db_client):
+async def update_relatives(user_id: str, relative_id: str, relative_name:str, mobile_number: str,db_client):
     db_payload = {"relative_name": relative_name, 
                 "mobile_number": mobile_number}    
     res = await db_client.table("relatives").update(db_payload).eq("user_id", user_id).eq("relative_id", relative_id).execute()
@@ -158,7 +157,7 @@ async def delete_existing_otp(mobile_number, db_client):
     await db_client.table("otp_verifications").delete().eq("mobile_number", mobile_number).execute()
     
 @catch_database_error
-async def delete_relatives(user_id: str, relative_id:UUID, db_client):
+async def delete_relatives(user_id: str, relative_id:str, db_client):
     res = await db_client.table("relatives").select().eq("user_id", user_id).eq("relative_id", relative_id).execute()
     if not res.data:
         raise RelativeNotFoundError("Relative not found")
