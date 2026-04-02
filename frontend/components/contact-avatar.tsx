@@ -7,8 +7,8 @@ import contacts from '@/data/contacts.json';
 
 const colors = ['#3723A9', '#FF6B2C', '#E91E63', '#009688', '#FF5722', '#673AB7', '#2196F3', '#4CAF50'];
 const formatNumber = (number: string) => 
-            {const digits = number.replace('639', '');
-            return `+639 ${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;};
+        {const digits = number.replace('639', '');
+        return `+639 ${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;};
 const getColor = (name: string) => {
 const index = name.charCodeAt(0) % colors.length;
     return colors[index];
@@ -19,7 +19,6 @@ const index = name.charCodeAt(0) % colors.length;
 export default function ContactAvatar ()
 
 {
-    
     return( 
     
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
