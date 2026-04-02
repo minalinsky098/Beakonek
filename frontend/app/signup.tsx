@@ -3,6 +3,7 @@ import {View, Text, TextInput, TouchableOpacity,Platform,Image} from 'react-nati
 import { useRouter } from 'expo-router';
 import { KeyboardAvoidingView, KeyboardProvider } from "react-native-keyboard-controller";
 import { Phone } from 'lucide-react-native';
+import Otp from "./otp";
 
 
 
@@ -12,6 +13,7 @@ export default function SignUpScreen ()
 const router = useRouter();
 const [phoneNumber, setPhoneNumber] = useState('');
 const [otp, setOtp] = useState('');
+const [showotp, setShowOtp] = useState(false);
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState('');
 const [result, setResult] = useState('');
@@ -86,10 +88,14 @@ const handleAuthOTP = async () => {
          
 
     
-            <TouchableOpacity onPress={()=> router.replace('/(tabs)/home')}
-            className="bg-[#FF6B2C] p-5 rounded-[25px] mb-4">
+             <TouchableOpacity onPress={()=> setShowOtp(true)}
+                className="bg-[#FF6B2C] p-5 rounded-[25px] mb-4">
                 <Text className="text-center text-white">Send OTP</Text>
-            </TouchableOpacity>
+             </TouchableOpacity>
+            
+             <Otp
+                visible={showotp} 
+                onClose={() => setShowOtp(false)}/>
 
              <TouchableOpacity onPress={()=> router.replace('/login')}
             className="bg-[#FFFFF] p-5 rounded-[25px] border border-[#737373]">
