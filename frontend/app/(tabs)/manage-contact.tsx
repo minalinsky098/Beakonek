@@ -1,10 +1,41 @@
-import {Text, View, TouchableOpacity, Image, Platform, TextInput  } from "react-native";
+import {Text, View, TouchableOpacity, Image, Platform, TextInput, ScrollView  } from "react-native";
 import { router } from "expo-router";
 import { KeyboardAvoidingView, KeyboardProvider } from "react-native-keyboard-controller";
 import { Ionicons } from '@expo/vector-icons';
+import { Pencil, Trash2 } from 'lucide-react-native';
+import { useState } from 'react';
+import contact from '@/data/contacts.json';
+
+const colors = ['#3723A9', '#FF6B2C', '#E91E63', '#009688', '#FF5722', '#673AB7', '#2196F3', '#4CAF50'];
+
+const getColor = (name: string) => {
+  const index = name.charCodeAt(0) % colors.length;
+  return colors[index];
+};
 
 export default function IntroScreen() 
 {
+
+  const [contacts, setContacts] = useState(contact);
+  const [search, setSearch] = useState('');
+
+  const filtered = contacts.filter(contact =>
+    contact.relative_name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const grouped = filtered.reduce((acc, contact) => {
+    const letter = contact.relative_name.charAt(0).toUpperCase();
+    if (!acc[letter]) acc[letter] = [];
+    acc[letter].push(contact);
+    return acc;
+  }, {} as Record<string, typeof contacts>);
+
+  const sortedKeys = Object.keys(grouped).sort();
+
+  const deleteContact = (relative_id: string) => {
+    setContacts(contacts.filter(c => c.relative_id !== relative_id));
+  };
+
   return (
      <View className="flex-[1] bg-[#3723A9]">
         <Image source={require('../../assets/images/background-image.jpg')}
@@ -29,6 +60,8 @@ export default function IntroScreen()
         <TextInput
           placeholder="Looking for someone?"
           className="flex-1 p-2 ml-2"
+          value={search}
+          onChangeText={setSearch}
         />
 
         </View>
@@ -40,6 +73,63 @@ export default function IntroScreen()
         
 
         <View className="rounded-t-[26px] flex-[4] bg-white pt-10 -mt-justify-center px-10">
+
+          <ScrollView showsVerticalScrollIndicator={false}>
+
+            {sortedKeys.length > 0 ? (
+              sortedKeys.map(letter => (
+                <View key={letter}>
+
+                  <Text className="text-gray-400 font-bold text-sm mb-1 mt-2">{letter}</Text>
+
+                  {grouped[letter].map((contact, index) => (
+                    <View key={contact.relative_id}>
+
+                      <View className="flex-row items-center py-2 px-1">
+                        
+                        <View style={{ backgroundColor: getColor(contact.relative_name) }}
+                          className="w-10 h-10 rounded-full justify-center items-center mr-4">
+
+                          <Text className="text-white font-bold">
+                            {contact.relative_name.charAt(0).toUpperCase()}
+                          </Text>
+
+                        </View>
+
+                        <Text className="flex-1 font-semibold">{contact.relative_name}</Text>
+
+                        <TouchableOpacity className="mr-5">
+
+                          <Pencil size={20} color="black" />
+
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => deleteContact(contact.relative_id)}>
+
+                          <Trash2 size={20} color="black" />
+
+                        </TouchableOpacity>
+                      </View>
+
+                      {index < grouped[letter].length - 1 && (
+                        <View className="border-b border-gray-200 mx-1" />
+                      )}
+                    </View>
+
+                  ))}
+                  <View className="mb-3" />
+                  
+                </View>
+              ))
+
+            ) : (
+              <View className="items-center justify-center py-8">
+                <Text className="text-gray-500">No contacts found</Text>
+              </View>
+            )}
+
+          </ScrollView>
+
         </View>  
 
       </View>
