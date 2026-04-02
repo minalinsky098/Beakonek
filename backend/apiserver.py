@@ -14,7 +14,7 @@ from utils import send_otp_sms, generate_otp, create_session
 from database import DuplicateMobileError, SessionNotFoundError, DatabaseError,RelativeNotFoundError\
 ,RelativeAlreadyAdded,NumberNotInDatabase,clean_up_expired_otp, delete_existing_otp\
 ,add_user_to_database,insert_otp_entry,get_session, logout_user, get_user, update_coordinates\
-,add_relative, get_user_coordinates,get_relatives, update_relatives, delete_relatives, number_in_db\
+,add_relative, get_users_with_coordinates,get_relatives, update_relatives, delete_relatives, number_in_db\
 ,update_name
 from auth import checkOTP, OTPNotFoundError, ExpiredOTPError
 from payloadmodels import AuthOTPPayload, RequestOTPPayload, LocationPayload, RelativesPayload\
@@ -98,9 +98,13 @@ def root():
 # temporary debug route, remove before deployment
 @app.get("/coords")
 async def coords(db_client = Depends(get_db_client)):
-    res = await get_user_coordinates(db_client)
+    res = await get_users_with_coordinates(db_client)
     relatives = await get_relatives(res["user_id"], db_client)
     return [res, relatives]
+
+@app.get("/api/v1/logs")
+async def get_logs(db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
+    pass
 
 @app.post("/api/v1/otp/requests")
 async def request_OTP(payload: RequestOTPPayload, db_client = Depends(get_db_client)):
@@ -157,8 +161,8 @@ async def add_relatives(payload: RelativesPayload, db_client = Depends(get_db_cl
 @app.put("/api/v1/relatives/{relative_id}")
 async def update_relative(payload: RelativesPayload,relative_id:UUID, db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
     try:
-        res = await update_relatives(user_id, relative_id,payload.relative_name, payload.relative_number,db_client)
-        return res.data[0]
+        res = await update_relatives(user_id, str(relative_id),payload.relative_name, payload.relative_number,db_client)
+        return res
     except RelativeNotFoundError:
         raise HTTPException(404, detail="Relative not found")
     except DatabaseError as e:
@@ -185,7 +189,7 @@ async def update_user_name(payload:UpdateNamePayload, db_client = Depends(get_db
 @app.delete("/api/v1/relatives/{relative_id}")
 async def delete_relative(relative_id:UUID, db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
     try:
-        await delete_relatives(user_id, relative_id,db_client)
+        await delete_relatives(user_id, str(relative_id),db_client)
         return Response(status_code=204)
     except RelativeNotFoundError:
         raise HTTPException(404, detail="Relative not found")

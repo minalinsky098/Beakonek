@@ -41,14 +41,14 @@ class LocationPayload(BaseModel):
     @field_validator("latitude")
     @classmethod
     def validate_latitude(cls, v):
-        if not(-90 <= v <= 90):
+        if not(4.5 <= v <= 21.5):
             raise ValueError("Invalid latitude coordinates")
         return v
     
     @field_validator("longitude")
     @classmethod
     def validate_longitude(cls, v):
-        if not(-180 <= v <= 180):
+        if not(114.0 <= v <= 127.0):
             raise ValueError("Invalid longitude coordinates")
         return v
     

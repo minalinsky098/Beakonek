@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-from uuid import UUID
 
 class DatabaseError(Exception):
     pass
@@ -76,11 +75,23 @@ async def add_relative(user_id: str, relative_name:str, mobile_number: str,db_cl
             raise RelativeAlreadyAdded("You already added this relative")
         raise 
     return res.data[0]
+  
+@catch_database_error 
+async def log_alert(user_id: str, earthquake_id: str, magnitude: float, place: str, relative_name: str, db_client):
+    db_payload = {
+        "user_id": user_id, 
+        "earthquake_id": earthquake_id,
+        "magnitude": magnitude, 
+        "place": place, 
+        "relative_name":relative_name
+    }
+    res = await db_client.table("alert_logs").insert(db_payload).execute() 
+    return res.data[0]
     
 #READ ==================================================================================
-@catch_database_error
 #checks if the number is in the database, returns True(the data if exists)
 #returns False(if data does not exist)
+@catch_database_error
 async def number_in_db(mobile_number: str, db_client):
     res = await db_client.table("users").select().eq("mobile_number", mobile_number).execute()
     return res.data
@@ -111,7 +122,7 @@ async def get_relatives(user_id: str, db_client):
 
 #returns a list of users with non-null coordinates
 @catch_database_error
-async def get_user_coordinates(db_client):
+async def get_users_with_coordinates(db_client):
     res = await db_client.table("users").select("*").not_.is_("latitude", "null").not_.is_("longitude", "null").execute()
     return res.data
 
@@ -122,7 +133,7 @@ async def update_coordinates(latitude: float, longitude: float, user_id: str, db
     await db_client.table("users").update(db_payload).eq("user_id", user_id).execute()
 
 @catch_database_error
-async def update_relatives(user_id: str, relative_id: UUID, relative_name:str, mobile_number: str,db_client):
+async def update_relatives(user_id: str, relative_id: str, relative_name:str, mobile_number: str,db_client):
     db_payload = {"relative_name": relative_name, 
                 "mobile_number": mobile_number}    
     res = await db_client.table("relatives").update(db_payload).eq("user_id", user_id).eq("relative_id", relative_id).execute()
@@ -146,7 +157,7 @@ async def delete_existing_otp(mobile_number, db_client):
     await db_client.table("otp_verifications").delete().eq("mobile_number", mobile_number).execute()
     
 @catch_database_error
-async def delete_relatives(user_id: str, relative_id:UUID, db_client):
+async def delete_relatives(user_id: str, relative_id:str, db_client):
     res = await db_client.table("relatives").select().eq("user_id", user_id).eq("relative_id", relative_id).execute()
     if not res.data:
         raise RelativeNotFoundError("Relative not found")

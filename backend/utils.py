@@ -37,10 +37,8 @@ async def send_otp_sms(mobile_number: str, otp: str):
         raise
 
 #DOUBLE CHECK
-async def send_alert_sms(mobile_numbers: list):
+async def send_alert_sms(mobile_number: str, message: str):
     try:
-        message = "Your relative in this place is in danger"
-        mobile_number_list = (", ").join(mobile_numbers)
         async with httpx.AsyncClient() as client:
                 response = await client.post(
                 "https://dashboard.philsms.com/api/v3/sms/send",
@@ -50,7 +48,7 @@ async def send_alert_sms(mobile_numbers: list):
                     "Accept": "application/json"
                 },
                 json={
-                    "recipient":mobile_number_list,
+                    "recipient":mobile_number,
                     "sender_id":"PhilSMS",
                     "type":"plain",
                     "message":message,
@@ -67,7 +65,21 @@ async def create_session(mobile_number: str, db_client, length: int = 32):
     return session_id
  
 async def fetch_earthquakes(starttime):
-    pass
+    url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
+    params = {
+        "format": "geojson",
+        "starttime": starttime.isoformat(),
+        "minmagnitude": 4.5,
+        "orderby": "time",
+        "minlatitude": 4.5,
+        "maxlatitude": 21.5,
+        "minlongitude": 114.0,
+        "maxlongitude": 127.0
+            }
+    async with httpx.AsyncClient() as client:
+        res = await client.get(url,params=params)
+    response = res.json()["features"]
+    return response
 
 async def check_earthquakes(db_client):
     pass
