@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from supabase import AsyncClient
 from database import insert_session, get_user
 from haversine import haversine, Unit
+from datetime import datetime
 
 
 load_dotenv()
@@ -64,7 +65,7 @@ async def create_session(mobile_number: str, db_client, length: int = 32):
     await insert_session(user_id, session_id, db_client)
     return session_id
  
-async def fetch_earthquakes(starttime):
+async def fetch_earthquakes(starttime:datetime):
     url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
     params = {
         "format": "geojson",
@@ -78,8 +79,8 @@ async def fetch_earthquakes(starttime):
             }
     async with httpx.AsyncClient() as client:
         res = await client.get(url,params=params)
-    response = res.json()["features"]
-    return response
+    res.raise_for_status()
+    return res.json().get("features", [])
 
 async def check_earthquakes(db_client):
     pass
