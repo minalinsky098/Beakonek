@@ -68,7 +68,7 @@ async def add_relative(user_id: str, relative_name:str, mobile_number: str,db_cl
                   "mobile_number": mobile_number}    
     try:
         await db_client.table("relatives").insert(db_payload).execute()
-        res = res = await db_client.table("relatives").select("*").eq("user_id", user_id).eq("mobile_number", mobile_number).execute()
+        res = await db_client.table("relatives").select("*").eq("user_id", user_id).eq("mobile_number", mobile_number).execute()
     except Exception as e:
         if "23505" in str(e):
             raise RelativeAlreadyAdded("You already added this relative")
@@ -98,7 +98,7 @@ async def get_user(mobile_number: str, db_client):
 @catch_database_error
 async def get_relatives(user_id: str, db_client):
     res = await db_client.table("relatives").select().eq("user_id", user_id).execute()
-    return res.data[0]
+    return res.data
 
 @catch_database_error
 async def get_user_coordinates(db_client):
@@ -112,13 +112,19 @@ async def update_coordinates(latitude: float, longitude: float, user_id: str, db
     await db_client.table("users").update(db_payload).eq("user_id", user_id).execute()
 
 @catch_database_error
-async def update_relatives(user_id: str, relative_id: UUID,  relative_name:str, mobile_number: str,db_client):
+async def update_relatives(user_id: str, relative_id: UUID, relative_name:str, mobile_number: str,db_client):
     db_payload = {"relative_name": relative_name, 
                 "mobile_number": mobile_number}    
     res = await db_client.table("relatives").update(db_payload).eq("user_id", user_id).eq("relative_id", relative_id).execute()
     if not res.data:
         raise RelativeNotFoundError("Relative not found")
     return res.data[0]
+
+@catch_database_error
+async def update_name(user_id:str, first_name:str, last_name:str, db_client):
+    db_payload = {"first_name": first_name, 
+                  "last_name": last_name} 
+    await db_client.table("users").update(db_payload).eq("user_id", user_id).execute()
 
 #DELETE====================================================================================
 @catch_database_error

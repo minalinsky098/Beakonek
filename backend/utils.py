@@ -40,8 +40,8 @@ async def send_otp_sms(mobile_number: str, otp: str):
 async def send_alert_sms(mobile_numbers: list):
     try:
         message = "Your relative in this place is in danger"
-        mobile_number_list = mobile_numbers.join(", ")
-        async with httpx.AsyncClient as client:
+        mobile_number_list = (", ").join(mobile_numbers)
+        async with httpx.AsyncClient() as client:
                 response = await client.post(
                 "https://dashboard.philsms.com/api/v3/sms/send",
                 headers={

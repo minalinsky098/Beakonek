@@ -14,9 +14,11 @@ from utils import send_otp_sms, generate_otp, create_session
 from database import DuplicateMobileError, SessionNotFoundError, DatabaseError,RelativeNotFoundError\
 ,RelativeAlreadyAdded,NumberNotInDatabase,clean_up_expired_otp, delete_existing_otp\
 ,add_user_to_database,insert_otp_entry,get_session, logout_user, get_user, update_coordinates\
-,add_relative, get_user_coordinates,get_relatives, update_relatives, delete_relatives, number_in_db
+,add_relative, get_user_coordinates,get_relatives, update_relatives, delete_relatives, number_in_db\
+,update_name
 from auth import checkOTP, OTPNotFoundError, ExpiredOTPError
-from payloadmodels import AuthOTPPayload, RequestOTPPayload, LocationPayload, RelativesPayload
+from payloadmodels import AuthOTPPayload, RequestOTPPayload, LocationPayload, RelativesPayload\
+,UpdateNamePayload
 
 scheduler = AsyncIOScheduler()
 load_dotenv()
@@ -138,8 +140,9 @@ async def add_relatives(payload: RelativesPayload, db_client = Depends(get_db_cl
     except RelativeAlreadyAdded as e:
         raise HTTPException(409, detail = str(e))
     except Exception as e:
-        raise HTTPException(500, detail = str(e))
+        raise HTTPException(500, detail = "Internal Server Error")
     
+#UPDATE============================================================================
 @app.put("/api/v1/relatives/{relative_id}")
 async def update_relative(payload: RelativesPayload,relative_id:UUID, db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
     try:
@@ -155,6 +158,12 @@ async def update_location(payload: LocationPayload, db_client = Depends(get_db_c
     await update_coordinates(payload.latitude, payload.longitude, user_id, db_client)
     return {"message":f"Users location has been updated"}
 
+@app.put("/api/v1/users")
+async def update_user_name(payload:UpdateNamePayload, db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
+    await update_name(user_id, payload.first_name, payload.last_name, db_client)
+    return {"message":f"User name has been updated"}
+
+#DELETE==============================================================================
 @app.delete("/api/v1/relatives/{relative_id}")
 async def delete_relative(relative_id:UUID, db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
     try:
