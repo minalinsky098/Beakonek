@@ -93,11 +93,12 @@ const handleVerify = async () => {
     alert("✅ Login Succesful!");
     await AsyncStorage.setItem('token', response["session id"]);
 
-    router.replace('/(tabs)/Home');
+    router.replace('/(tabs)/home');
   }
 };//delete later
 
     return (
+      
       
    <KeyboardProvider>
 
