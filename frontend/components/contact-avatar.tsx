@@ -1,6 +1,7 @@
 
 import {View,Text, ScrollView} from "react-native"
 import contacts from '@/data/contacts.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 

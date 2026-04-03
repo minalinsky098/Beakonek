@@ -4,6 +4,7 @@ import { User, Bell } from 'lucide-react-native';
 import EarthquakeCard from "@/components/earthquake-card";
 import ContactAvatar from "@/components/contact-avatar";
 import LogsList from "@/components/log-item";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 

@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Pencil, Trash2 } from 'lucide-react-native';
 import { useState } from 'react';
 import contact from '@/data/contacts.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const colors = ['#3723A9', '#FF6B2C', '#E91E63', '#009688', '#FF5722', '#673AB7', '#2196F3', '#4CAF50'];
 
@@ -118,7 +119,7 @@ export default function IntroScreen()
 
                   ))}
                   <View className="mb-3" />
-                  
+
                 </View>
               ))
 

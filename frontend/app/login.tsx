@@ -3,6 +3,7 @@ import {View, Text, TextInput, TouchableOpacity,Platform, Image} from 'react-nat
 import { useRouter } from 'expo-router';
 import { KeyboardAvoidingView, KeyboardProvider } from "react-native-keyboard-controller";
 import Otp from "./otp";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -17,20 +18,21 @@ const [otp, setOtp] = useState(''); //idk san to ginamit gawa nalang ako ng akin
 const [showotp, setShowOtp] = useState(false);
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState('');
-const [result, setResult] = useState('');
-const [registered,setRegistered] = useState('');
 const [keyboardEnabled, setKeyboardEnabled] = useState(true);
 
 
 const handleRequestOTP = async () => {
   try {
-    const response = await fetch('https://interlunar-nella-lonelily.ngrok-free.dev/api/v1/requestOTP', {
+    const response = await fetch('https://beakonek.onrender.com/api/v1/otp/requests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mobile_number: phoneNumber, purpose: 'registration'}),
+      body: JSON.stringify({
+      mobile_number: '639' + phoneNumber,
+      purpose: 'login'}),
     });
     const data = await response.json();
-    setResult(JSON.stringify(data));
+    console.log(data);
+    console.log('This is request');
   } catch (error) {
     console.log(error);
   }
@@ -38,13 +40,18 @@ const handleRequestOTP = async () => {
 
 const handleAuthOTP = async () => {
   try {
-    const response = await fetch('https://interlunar-nella-lonelily.ngrok-free.dev/api/v1/authOTP', {
+    const response = await fetch('https://beakonek.onrender.com/api/v1/otp/authentications', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mobile_number: phoneNumber, purpose: 'registration', otp: otp }),
+      body: JSON.stringify({ mobile_number: '639'+ phoneNumber,
+      purpose: 'login',
+      otp: otp }),
     });
     const data = await response.json();
-    setRegistered(JSON.stringify(data));
+    console.log(data);
+    console.log("This is auth")
+    await AsyncStorage.setItem('token', data.session_id);
+    return data;
   } catch (error) {
     console.log(error);
   }
@@ -55,20 +62,24 @@ const phoneverification = () => {
     setError("Invalid phone number. Please enter a 9-digit number.");
     return;
   }
+    handleRequestOTP();
     setError("");
     setShowOtp(true);
     setKeyboardEnabled(!keyboardEnabled);
   }
 
 
-const handleVerify = () => {
-  if (otp !== "123456") {
+const handleVerify = async () => {
+  const response = await handleAuthOTP();
+  if (response.detail === "Incorrect OTP") {
     setError("Invalid OTP. Please try again.");
   } else {
-    setError("");
-    alert("✅ Verified!");
+    setKeyboardEnabled(!keyboardEnabled);
     setShowOtp(false);
-    router.replace('/(tabs)/Home');
+    setError("");
+    alert("✅ Login Succesful!");
+
+    router.replace('/(tabs)/home');
   }
 };//delete later
 
@@ -127,7 +138,7 @@ const handleVerify = () => {
             <TouchableOpacity onPress={phoneverification}
             className="bg-[#FF6B2C] p-5 rounded-[25px] mb-4">
                 <Text className="text-center text-white">Send OTP</Text>
-             </TouchableOpacity>;
+             </TouchableOpacity>
             
             <Otp
                visible={showotp}
