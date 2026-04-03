@@ -2,11 +2,9 @@ import secrets
 import httpx
 import os
 from dotenv import load_dotenv
-from supabase import AsyncClient
-from database import insert_session, get_user
+from database import insert_session, get_user, get_users_with_coordinates, log_alert, get_all_relatives
 from haversine import haversine, Unit
 from datetime import datetime, timezone, timedelta
-from database import get_users_with_coordinates, log_alert, get_all_relatives
 
 alerted_ids = set()
 last_poll_time = None
@@ -102,18 +100,18 @@ async def check_earthquakes(db_client):
 async def process_earthquakes(earthquakes, db_client):
     try:
         global alerted_ids
-        users = await get_users_with_coordinates(db_client)
-        all_relatives = await get_all_relatives(db_client) #get all relatives
-        relatives_map = {} 
-        for relative in all_relatives: #map all relatives to each user_id
-            user_id = relative["user_id"]
-            relatives_map.setdefault(user_id, []).append(relative)
             
         for earthquake in earthquakes:
             earthquake_id = earthquake["earthquake_id"]
             if earthquake_id in alerted_ids:
                 continue
             alerted_ids.add(earthquake_id)
+            users = await get_users_with_coordinates(db_client)
+            all_relatives = await get_all_relatives(db_client) #get all relatives
+            relatives_map = {} 
+            for relative in all_relatives: #map all relatives to each user_id
+                user_id = relative["user_id"]
+                relatives_map.setdefault(user_id, []).append(relative)
             
             magnitude = earthquake["magnitude"]
             earthquake_lat = earthquake["latitude"]
@@ -128,7 +126,7 @@ async def process_earthquakes(earthquakes, db_client):
                 
                 if earthquake_distance <= alert_radius:
                     user_id = user["user_id"]
-                    user_fullname = user["first_name"] + user["last_name"]
+                    user_fullname = f"{user['first_name']} {user['last_name']}"
                     relatives = relatives_map.get(user_id, [])
                     
                     for relative in relatives:

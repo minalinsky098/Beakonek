@@ -131,7 +131,7 @@ async def get_users_with_coordinates(db_client):
 
 @catch_database_error
 async def get_all_relatives(db_client):
-    res = await db_client.table("relatives").select().execute()
+    res = await db_client.table("relatives").select("user_id, mobile_number, relative_name").execute()
     return res.data
 
 #UPDATE ============================================================================  
