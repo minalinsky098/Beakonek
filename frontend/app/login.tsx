@@ -68,7 +68,7 @@ const handleVerify = () => {
     setError("");
     alert("✅ Verified!");
     setShowOtp(false);
-    router.replace('/(tabs)/Home');
+    router.replace('/(tabs)/home');
   }
 };//delete later
 

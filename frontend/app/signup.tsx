@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { KeyboardAvoidingView, KeyboardProvider } from "react-native-keyboard-controller";
 import { Phone } from 'lucide-react-native';
 import Otp from "./otp";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -36,13 +37,16 @@ const handleRequestOTP = async () => {
 
 const handleAuthOTP = async () => {
   try {
-    const response = await fetch('https://interlunar-nella-lonelily.ngrok-free.dev/api/v1/authOTP', {
+    const response = await fetch('https://interlunar-nella-lonelily.ngrok-free.dev/api/v1/otp/authentications', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mobile_number: phoneNumber, purpose: 'registration', otp: otp }),
+      body: JSON.stringify({
+      mobile_number: '639' + phoneNumber,
+      purpose: 'registration',
+      otp: otp }),
     });
     const data = await response.json();
-    setRegistered(JSON.stringify(data));
+    console.log(data);
   } catch (error) {
     console.log(error);
   }
@@ -65,7 +69,7 @@ const handleVerify = () => {
     setError("");
     alert("✅ Verified!");
     setShowOtp(false);
-    router.replace('/(tabs)/Home');
+    router.replace('/(tabs)/home');
   }
 };//delete later
 
