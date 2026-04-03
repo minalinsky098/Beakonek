@@ -14,7 +14,7 @@ from utils import send_otp_sms, generate_otp, create_session, check_earthquakes,
 from database import DuplicateMobileError, SessionNotFoundError, DatabaseError,RelativeNotFoundError\
 ,RelativeAlreadyAdded,NumberNotInDatabase,clean_up_expired_otp, delete_existing_otp\
 ,add_user_to_database,insert_otp_entry,get_session, logout_user, get_user, update_coordinates\
-,add_relative, get_users_with_coordinates,get_relatives, update_relatives, delete_relatives, number_in_db\
+,add_relative, update_relatives, delete_relatives, number_in_db\
 ,update_name, get_logs
 from auth import checkOTP, OTPNotFoundError, ExpiredOTPError
 from payloadmodels import AuthOTPPayload, RequestOTPPayload, LocationPayload, RelativesPayload\
