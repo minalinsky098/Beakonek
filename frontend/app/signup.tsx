@@ -34,6 +34,7 @@ const handleRequestOTP = async () => {
     const data = await response.json();
     console.log(data);
     console.log("This is request");
+    return data;
   } catch (error) {
     console.log(error);
   }
@@ -62,7 +63,7 @@ const handleAuthOTP = async () => {
   }
 };
 
-const inputverification = () => {
+const inputverification = async () => {
   if (firstName.trim().length < 2 || lastName.trim().length < 2) {
     setError2("Name must be at least 2 characters");
     return;
@@ -76,8 +77,15 @@ const inputverification = () => {
     setError("Phone number must start with 9.");
     return;
   }
+
+  const response = await handleRequestOTP();
+
+   if (response.detail === "You cannot register as the number has been registered") {
+    setError("This number is already registered. Please use another.");
+    return;
+    }
+
     setError2("");
-    handleRequestOTP();
     setError("");
     setShowOtp(true);
     setKeyboardEnabled(!keyboardEnabled);
