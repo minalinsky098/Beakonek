@@ -50,7 +50,6 @@ const handleAuthOTP = async () => {
     const data = await response.json();
     console.log(data);
     console.log("This is auth")
-    await AsyncStorage.setItem('token', data.session_id);
     return data;
   } catch (error) {
     console.log(error);
@@ -80,6 +79,11 @@ const phoneverification = () => {
 
 const handleVerify = async () => {
   const response = await handleAuthOTP();
+
+  if (!response) {
+  setError("Something went wrong. Please try again.");
+  return;
+  }
   if (response.detail === "Incorrect OTP") {
     setError("Invalid OTP. Please try again.");
   } else {
@@ -87,6 +91,7 @@ const handleVerify = async () => {
     setShowOtp(false);
     setError("");
     alert("✅ Login Succesful!");
+    await AsyncStorage.setItem('token', response["session id"]);
 
     router.replace('/(tabs)/Home');
   }

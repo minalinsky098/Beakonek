@@ -36,7 +36,7 @@ export default function TabLayout() {
        options={{
         title: 'Add Contact',
         tabBarIcon: ({ color }) => <UserPlus color={color} size={24} />,
-        headerShown: true,
+        headerShown: false,
         headerTitle: 'New Contacts',
         headerTitleAlign: 'center',
       

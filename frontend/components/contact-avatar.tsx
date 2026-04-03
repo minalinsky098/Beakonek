@@ -1,25 +1,47 @@
 
 import {View,Text, ScrollView} from "react-native"
-import contacts from '@/data/contacts.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from "react";
 
 
 
 
-const colors = ['#3723A9', '#FF6B2C', '#E91E63', '#009688', '#FF5722', '#673AB7', '#2196F3', '#4CAF50'];
-const formatNumber = (number: string) => 
-        {const digits = number.replace('639', '');
+    const colors = ['#3723A9', '#FF6B2C', '#E91E63', '#009688', '#FF5722', '#673AB7', '#2196F3', '#4CAF50'];
+    const formatNumber = (number: string) => 
+         {const digits = number.replace('639', '');
         return `+639 ${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;};
-const getColor = (name: string) => {
-const index = name.charCodeAt(0) % colors.length;
-    return colors[index];
-    };
+    const getColor = (name: string) => {
+    const index = name.charCodeAt(0) % colors.length;
+        return colors[index];
+        };
     
 
 
 export default function ContactAvatar ()
 
 {
+    const [contacts, setContacts] = useState([]);
+
+    useEffect(() => {
+    loadContacts();
+    }, []);
+
+    const loadContacts = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const response = await fetch('https://beakonek.onrender.com/api/v1/relatives', {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    const data = await response.json();
+    console.log(data);
+    console.log(data);
+    console.log(data);
+    setContacts(data);
+    };
+
+
+
+
     return( 
     
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
