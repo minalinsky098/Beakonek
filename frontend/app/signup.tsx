@@ -17,7 +17,12 @@ const [otp, setOtp] = useState('');
 const [showotp, setShowOtp] = useState(false);
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState('');
+const [error2, setError2] = useState('');
+const [result, setResult] = useState('');
+const [registered,setRegistered] = useState('');
 const [keyboardEnabled, setKeyboardEnabled] = useState(true);
+const [firstName, setFirstName] = useState("");
+const [lastName, setLastName] = useState("");
 
 const handleRequestOTP = async () => {
   try {
@@ -56,11 +61,16 @@ const handleAuthOTP = async () => {
   }
 };
 
-const phoneverification = () => {
+const inputverification = () => {
+  if (firstName.trim().length <= 2 || lastName.trim().length <= 2) {
+    setError2("Name must be at least 2 characters");
+    return;
+  }
   if (phoneNumber.length !== 9) {
     setError("Invalid phone number. Please enter a 9-digit number.");
     return;
   }
+    setError2("");
     handleRequestOTP();
     setError("");
     setShowOtp(true);
@@ -105,17 +115,39 @@ const handleVerify = async () => {
 
            <View className="flex-row items-center bg-[#D9D9D9] rounded-[8px] border border-[#737373] mb-3">
            <TextInput
-           placeholder="Last Name"
-           className="flex-1 p-4"
+            placeholder="Last Name"
+            className="flex-1 p-4"
+            value={lastName}
+            onChangeText={(text) => {
+            setLastName(text);
+            setError2("");
+            }}
            />
            </View>
 
+            {error2 ? (
+              <Text className="text-red-500 text-sm mb-2">
+                {error2}
+              </Text>
+            ) : null}
+
            <View className="flex-row items-center bg-[#D9D9D9] rounded-[8px] border border-[#737373] mb-3">
            <TextInput
-           placeholder="First Name"
-           className="flex-1 p-4"
+            placeholder="First Name"
+            className="flex-1 p-4"
+            value={firstName}
+            onChangeText={(text) => {
+            setFirstName(text);
+            setError2("");
+           }}
            />
            </View>
+
+            {error2 ? (
+              <Text className="text-red-500 text-sm mb-2">
+                {error2}
+              </Text>
+            ) : null}
 
            <Text className="mb-3 font-semibold">Phone Number</Text>
             
@@ -147,7 +179,7 @@ const handleVerify = async () => {
          
 
     
-             <TouchableOpacity onPress={phoneverification}
+             <TouchableOpacity onPress={inputverification}
             className="bg-[#FF6B2C] p-5 rounded-[25px] mb-4">
                 <Text className="text-center text-white">Send OTP</Text>
              </TouchableOpacity>
