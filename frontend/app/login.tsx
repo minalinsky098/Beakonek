@@ -61,7 +61,7 @@ const handleAuthOTP = async () => {
 
 const phoneverification = async () => {
 
-  console.log("pressed!");
+  
 
   if (phoneNumber.length !== 9) {
     setError("Invalid phone number. Please enter a 9-digit number.");
