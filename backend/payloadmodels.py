@@ -65,26 +65,10 @@ class UpdateNamePayload(BaseModel):
     first_name: str
     last_name: str
   
-class EarthquakePayload(BaseModel):
+class EarthquakePayload(LocationPayload):
     earthquake_id: str
     magnitude: float
-    latitude: float
-    longitude: float
     place: str
-    
-    @field_validator("latitude")
-    @classmethod
-    def validate_latitude(cls, v):
-        if not(4.5 <= v <= 21.5):
-            raise ValueError("Invalid latitude coordinates(PH based only)")
-        return v
-    
-    @field_validator("longitude")
-    @classmethod
-    def validate_longitude(cls, v):
-        if not(114.0 <= v <= 127.0):
-            raise ValueError("Invalid longitude coordinates(PH based only)")
-        return v
     
     
 def validate_mobile_number(mobile_number):

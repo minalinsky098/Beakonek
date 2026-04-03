@@ -165,6 +165,7 @@ async def simulate_earthquakes(payload: EarthquakePayload, db_client = Depends(g
         "longitude": payload.longitude,
         "place": payload.place}]
     await process_earthquakes(earthquake, db_client)
+    return {"message": "Earthquake simulation processed successfully"}
     
 #UPDATE============================================================================
 @app.put("/api/v1/relatives/{relative_id}")
