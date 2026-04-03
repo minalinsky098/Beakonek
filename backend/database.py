@@ -18,6 +18,9 @@ class RelativeAlreadyAdded(DatabaseError):
 class NumberNotInDatabase(DatabaseError):
     pass
 
+class LogNotFoundError(DatabaseError):
+    pass
+
 def catch_database_error(func):
     # turns unexpected database errors into one consistent error type
     async def wrapper(*args, **kwargs):
@@ -128,8 +131,18 @@ async def get_users_with_coordinates(db_client):
 
 @catch_database_error
 async def get_all_relatives(db_client):
-    res = await db_client.table("relatives").select().execute()
+    res = await db_client.table("relatives").select("user_id, mobile_number, relative_name").execute()
     return res.data
+
+@catch_database_error
+async def get_user_relatives(db_client, user_id):
+    res = await db_client.table("relatives").select().eq("user_id", user_id).execute()
+    return res.data
+
+@catch_database_error
+async def get_user_with_session(db_client, user_id):
+    res = await db_client.table("users").select("mobile_number, first_name, last_name").eq("user_id", user_id).execute()
+    return res.data[0]
 
 #UPDATE ============================================================================  
 @catch_database_error
@@ -167,6 +180,14 @@ async def delete_relatives(user_id: str, relative_id:str, db_client):
     if not res.data:
         raise RelativeNotFoundError("Relative not found")
     res = await db_client.table("relatives").delete().eq("user_id", user_id).eq("relative_id", relative_id).execute()
+    
+@catch_database_error  
+async def delete_logs(user_id: str, log_id:str, db_client):
+    res = await db_client.table("alert_logs").select().eq("user_id", user_id).eq("log_id", log_id).execute()
+    if not res.data:
+        raise LogNotFoundError("Log not found")
+    res = await db_client.table("alert_logs").delete().eq("user_id", user_id).eq("log_id", log_id).execute()
+
       
 # removes old OTP codes that are no longer valid
 async def clean_up_expired_otp(db_client):

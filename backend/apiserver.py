@@ -12,10 +12,10 @@ from uuid import UUID
 #other file imports for separation of concerns
 from utils import send_otp_sms, generate_otp, create_session, check_earthquakes, process_earthquakes
 from database import DuplicateMobileError, SessionNotFoundError, DatabaseError,RelativeNotFoundError\
-,RelativeAlreadyAdded,NumberNotInDatabase,clean_up_expired_otp, delete_existing_otp\
+,RelativeAlreadyAdded,NumberNotInDatabase,  LogNotFoundError,clean_up_expired_otp, delete_existing_otp\
 ,add_user_to_database,insert_otp_entry,get_session, logout_user, get_user, update_coordinates\
 ,add_relative, update_relatives, delete_relatives, number_in_db\
-,update_name, get_logs
+,update_name, get_logs, delete_logs, get_user_relatives, get_user_with_session
 from auth import checkOTP, OTPNotFoundError, ExpiredOTPError
 from payloadmodels import AuthOTPPayload, RequestOTPPayload, LocationPayload, RelativesPayload\
 ,UpdateNamePayload, EarthquakePayload
@@ -102,9 +102,35 @@ def root():
 
 @app.get("/api/v1/logs")
 async def get_user_logs(db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
-    res = await get_logs(user_id, db_client)
+    try:
+        res = await get_logs(user_id, db_client)
+    except HTTPException:
+        raise
+    except DatabaseError:
+        raise HTTPException(status_code=500, detail="Database operation failed")
     return res
 
+@app.get("/api/v1/relatives")
+async def get_relatives_of_user(db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
+    try:
+        res = await get_user_relatives(user_id, db_client)
+    except HTTPException:
+        raise
+    except DatabaseError:
+        raise HTTPException(status_code=500, detail="Database operation failed")
+    return res
+
+@app.get("/api/v1/users")
+async def get_user_profile(db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
+    try:
+        res = await get_user_with_session(db_client, user_id)
+    except HTTPException:
+        raise
+    except DatabaseError:
+        raise HTTPException(status_code=500, detail="Database operation failed")
+    return res
+
+#POST================================================================================================================
 @app.post("/api/v1/otp/requests")
 async def request_OTP(payload: RequestOTPPayload, db_client = Depends(get_db_client)):
     try:
@@ -203,6 +229,16 @@ async def delete_relative(relative_id:UUID, db_client = Depends(get_db_client), 
         return Response(status_code=204)
     except RelativeNotFoundError:
         raise HTTPException(404, detail="Relative not found")
+    except DatabaseError:
+        raise HTTPException(500, detail=f"Internal Server Error")
+    
+@app.delete("/api/logs/{log_id}")
+async def delete_log(log_id:UUID, db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
+    try:
+        await delete_logs(user_id, str(log_id),db_client)
+        return Response(status_code=204)
+    except LogNotFoundError:
+        raise HTTPException(404, detail="Log not found")
     except DatabaseError:
         raise HTTPException(500, detail=f"Internal Server Error")
     

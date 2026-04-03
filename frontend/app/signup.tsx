@@ -100,9 +100,24 @@ const handleVerify = async () => {
               />
             </View>
 
-         <View className="rounded-[28px] flex-[4] bg-[#F5F5F5] p-10 -mt-16">
-            <Text className="text-2xl font-bold mb-6 ">Sign up</Text>
-            <Text className="mb-3 font-semibold">Phone Number</Text>
+         <View className="rounded-[28px] flex-[6] bg-[#F5F5F5] p-10 -mt-16">
+            <Text className="text-2xl font-bold mb-5 ">Sign up</Text>
+
+           <View className="flex-row items-center bg-[#D9D9D9] rounded-[8px] border border-[#737373] mb-3">
+           <TextInput
+           placeholder="Last Name"
+           className="flex-1 p-4"
+           />
+           </View>
+
+           <View className="flex-row items-center bg-[#D9D9D9] rounded-[8px] border border-[#737373] mb-3">
+           <TextInput
+           placeholder="First Name"
+           className="flex-1 p-4"
+           />
+           </View>
+
+           <Text className="mb-3 font-semibold">Phone Number</Text>
             
 
           <View className="flex-row items-center bg-[#D9D9D9] rounded-[8px] border border-[#737373] mb-3">
