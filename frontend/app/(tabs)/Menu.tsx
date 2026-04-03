@@ -1,5 +1,6 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import { CircleUserRound, SquarePen } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Menu ()
