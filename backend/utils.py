@@ -133,7 +133,7 @@ async def process_earthquakes(earthquakes, db_client):
                         relative_number = relative["mobile_number"]
                         relative_name = relative["relative_name"]
                         message = f"Your relative {user_fullname} has been affected by a {magnitude} magnitude earthquake in {place}"
-                        await send_alert_sms(relative_number, message)
+                        #await send_alert_sms(relative_number, message)
                         await log_alert(user_id, earthquake_id, magnitude, place, relative_name, db_client)
                         
     except Exception as e:
