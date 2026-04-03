@@ -1,11 +1,48 @@
-import {Text, View, Platform, TextInput} from "react-native";
+import {Text, View, Platform, TextInput, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { KeyboardAvoidingView, KeyboardProvider } from "react-native-keyboard-controller";
 import { useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
+import { useLayoutEffect } from "react";
+import { Check } from "lucide-react-native";
+
+
 export default function AddContacts ()
 {
+    const navigation = useNavigation();
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [error, setError] = useState('');
+
+    
+    const phoneverification = () => {
+      if (phoneNumber.length !== 9) {
+        setError("Invalid phone number. Please enter a 9-digit number.");
+        return;
+      }
+    }
+
+  const handlePress = () => {
+    console.log("Pressed!");
+    
+   };
+
+
+
+     useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={handlePress}
+          className="mr-4 w-10 h-10 border-2 border-orange-500 rounded-full items-center justify-center"
+        >
+          <Check size={20} color="#FF6B35" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
+    
 
     return(
          <KeyboardProvider>
