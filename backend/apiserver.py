@@ -116,8 +116,8 @@ async def get_relatives_of_user(db_client = Depends(get_db_client), user_id = De
         res = await get_user_relatives(db_client, user_id)
     except HTTPException:
         raise
-    except DatabaseError as e:
-        raise HTTPException(status_code=500, detail=f"Database operation failed: {e}" )
+    except DatabaseError:
+        raise HTTPException(status_code=500, detail=f"Database operation failed" )
     return res
 
 @app.get("/api/v1/users")
