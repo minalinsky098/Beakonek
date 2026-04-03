@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { OtpInput } from "react-native-otp-entry";
 
-export default function Otp({ visible, onClose }) {
+export default function Otp({ visible, onClose, otp, setOtp, error, onVerify }) {
   return (
     <Modal
       visible={visible}
@@ -31,9 +31,15 @@ export default function Otp({ visible, onClose }) {
           <View className="px-6">
              <OtpInput
                numberOfDigits={6}
-               focusColor="#FF6B2C"
-               onTextChange={(text) => console.log(text)}/>
+               focusColor={error ? "red" : "#FF6B2C"}
+               onTextChange={(text) => setOtp(text)}/>
           </View>
+
+          {error ? (
+          <Text className="text-red-500 text-sm mt-2 text-center">
+          {error}
+          </Text>
+          ) : null}
 
           <TouchableOpacity
             onPress={onClose}>
@@ -42,7 +48,7 @@ export default function Otp({ visible, onClose }) {
 
           <TouchableOpacity
             className="bg-[#FF6B2C] rounded-lg p-2 w-40 mt-2"
-            onPress={()=> router.replace('/(tabs)/home')}>
+            onPress={onVerify}>
             <Text className="text-white text-center">Enter</Text>
           </TouchableOpacity>
 

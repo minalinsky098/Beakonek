@@ -48,6 +48,27 @@ const handleAuthOTP = async () => {
   }
 };
 
+const phoneverification = () => {
+  if (phoneNumber.length !== 9) {
+    setError("Invalid phone number. Please enter a 9-digit number.");
+    return;
+  }
+    setError("");
+    setShowOtp(true);
+    setKeyboardEnabled(!keyboardEnabled);
+  }
+
+const handleVerify = () => {
+  if (otp !== "123456") {
+    setError("Invalid OTP. Please try again.");
+  } else {
+    setError("");
+    alert("✅ Verified!");
+    setShowOtp(false);
+    router.replace('/(tabs)/Home');
+  }
+};//delete later
+
     return (
       
         <KeyboardProvider>
@@ -79,10 +100,18 @@ const handleAuthOTP = async () => {
            keyboardType="phone-pad"
            maxLength={9}
            value={phoneNumber}
-          onChangeText={setPhoneNumber}
+           onChangeText={(text) => {
+            setPhoneNumber(text);
+            setError(""); 
+          }}
           />
           </View>
             
+            {error ? (
+              <Text className="text-red-500 text-sm mb-2">
+                {error}
+              </Text>
+            ) : null}
 
            
  
@@ -90,18 +119,22 @@ const handleAuthOTP = async () => {
          
 
     
-             <TouchableOpacity onPress={()=> {setShowOtp(true);
-             setKeyboardEnabled(!keyboardEnabled);
-             }}
-                className="bg-[#FF6B2C] p-5 rounded-[25px] mb-4">
+             <TouchableOpacity onPress={phoneverification}
+            className="bg-[#FF6B2C] p-5 rounded-[25px] mb-4">
                 <Text className="text-center text-white">Send OTP</Text>
-             </TouchableOpacity>
+             </TouchableOpacity>;
             
              <Otp
-                visible={showotp} 
+                visible={showotp}
                 onClose={() => {setShowOtp(false);
-                  setKeyboardEnabled(!keyboardEnabled);
-                }}/>
+                setKeyboardEnabled(!keyboardEnabled);
+                }
+                }
+                otp={otp}
+                setOtp={setOtp}
+                error={error}
+                onVerify={handleVerify}/>
+             
 
              <TouchableOpacity onPress={()=> router.replace('/login')}
             className="bg-[#FFFFF] p-5 rounded-[25px] border border-[#737373]">
