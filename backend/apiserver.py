@@ -15,7 +15,7 @@ from database import DuplicateMobileError, SessionNotFoundError, DatabaseError,R
 ,RelativeAlreadyAdded,NumberNotInDatabase,  LogNotFoundError,clean_up_expired_otp, delete_existing_otp\
 ,add_user_to_database,insert_otp_entry,get_session, logout_user, get_user, update_coordinates\
 ,add_relative, update_relatives, delete_relatives, number_in_db\
-,update_name, get_logs, delete_logs, get_user_relative
+,update_name, get_logs, delete_logs, get_user_relative, get_user_with_session
 from auth import checkOTP, OTPNotFoundError, ExpiredOTPError
 from payloadmodels import AuthOTPPayload, RequestOTPPayload, LocationPayload, RelativesPayload\
 ,UpdateNamePayload, EarthquakePayload
@@ -110,6 +110,12 @@ async def get_user_relatives(db_client = Depends(get_db_client), user_id = Depen
     res = await get_user_relative(user_id, db_client)
     return res
 
+@app.get("/api/v1/users")
+async def get_user(db_client = Depends(get_db_client), user_id = Depends(get_current_usersession)):
+    res = await get_user_with_session(db_client, user_id)
+    return res
+
+#POST================================================================================================================
 @app.post("/api/v1/otp/requests")
 async def request_OTP(payload: RequestOTPPayload, db_client = Depends(get_db_client)):
     try:

@@ -139,6 +139,11 @@ async def get_user_relative(db_client, user_id):
     res = await db_client.table("relatives").select().eq("user_id", user_id).execute()
     return res.data
 
+@catch_database_error
+async def get_user_with_session(db_client, user_id):
+    res = await db_client.table("users").select("mobile_number", "first_name", "last_name").eq("user_id", user_id).execute()
+    return res.data[0]
+
 #UPDATE ============================================================================  
 @catch_database_error
 async def update_coordinates(latitude: float, longitude: float, user_id: str, db_client):
