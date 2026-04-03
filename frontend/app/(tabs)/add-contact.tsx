@@ -12,23 +12,33 @@ export default function AddContacts ()
 
     const [phoneNumber, setPhoneNumber] = useState('');
     const [name, setName] = useState('');
-    const [error, setError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+    const [nameError, setNameError] = useState('');
 
 
     
-    const phoneverification = () => {
+    const loginValidation = () => {
+
+      if (name.length < 2)
+      {
+        console.log(phoneNumber);
+        setNameError("Name must be at least 2 characters");
+        return;
+      }
+
       if (phoneNumber.length !== 10) {
         console.log(phoneNumber);
-        setError("Invalid phone number. Please enter a 10-digit number.");
+        setPhoneError("Invalid phone number. Please enter a 10-digit number.");
         return;
       } 
       if (!phoneNumber.startsWith('9')) {
-      setError("Phone number must start with 9.");
+      setPhoneError("Phone number must start with 9.");
       return;
       }
       setPhoneNumber('');
       setName('');
-      setError('');
+      setPhoneError('');
+      setNameError('');
       handleSave();
       
    
@@ -59,8 +69,7 @@ export default function AddContacts ()
       };
 
       const addContact = () => {
-        console.log("Pressed!");
-        phoneverification();
+        loginValidation();
         
       };
 
@@ -87,14 +96,19 @@ export default function AddContacts ()
      
           <Text className="mb-3 font-semibold">Name</Text>
 
-           <View className="flex-row items-center bg-[#D9D9D9]  border border-[#737373] mb-6">
+           <View className="flex-row items-center bg-[#D9D9D9] rounded-[8px]  border border-[#737373] mb-6">
            <TextInput
-           placeholder="Juan dela Cruz"
+           placeholder="Juan Dela Cruz"
            className="flex-1 p-4"
            value={name}
            onChangeText={setName}
            />
             </View>
+            {nameError ? (
+                <Text className="text-red-500 text-sm mb-2">
+                {nameError}
+                </Text>
+                ) : null}
 
 
            <Text className="mb-3 font-semibold">Phone Number</Text>
@@ -111,9 +125,9 @@ export default function AddContacts ()
       
           />
           </View>
-            {error ? (
+            {phoneError ? (
                 <Text className="text-red-500 text-sm mb-2">
-                {error}
+                {phoneError}
                 </Text>
                 ) : null}
 
