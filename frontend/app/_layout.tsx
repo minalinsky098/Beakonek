@@ -8,6 +8,7 @@ import { ImageBackground } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useEffect, useState } from "react";
 import NetInfo from "@react-native-community/netinfo";
+import '@/tasks/location-task';
 
 
 SystemUI.setBackgroundColorAsync('#3723A9');
@@ -44,7 +45,7 @@ export default function RootLayout() {
 
       <Stack initialRouteName='loading'
              screenOptions={{
-              animation: 'slide_from_bottom',
+              animation: 'default',
               animationDuration: 500,
             }}
              >
