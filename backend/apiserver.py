@@ -16,7 +16,7 @@ from database import DuplicateMobileError, SessionNotFoundError, DatabaseError,R
 ,add_user_to_database,insert_otp_entry,get_session, logout_user, get_user, update_coordinates\
 ,add_relative, update_relatives, delete_relatives, number_in_db\
 ,update_name, get_logs, delete_logs, get_user_relatives, get_user_with_session, get_recent_earthquakes
-from auth import checkOTP, OTPNotFoundError, ExpiredOTPError
+from auth import checkOTP, OTPNotFoundError, ExpiredOTPError, TooManyAttemptsError
 from payloadmodels import AuthOTPPayload, RequestOTPPayload, LocationPayload, RelativesPayload\
 ,UpdateNamePayload, EarthquakePayload
 
@@ -179,6 +179,8 @@ async def auth_otp(payload:AuthOTPPayload, db_client: AsyncClient = Depends(get_
         raise HTTPException(status_code=404, detail=str(e))
     except ExpiredOTPError as e:
         raise HTTPException(status_code=401, detail=str(e))
+    except TooManyAttemptsError as e:
+        raise HTTPException(status_code=429, detail=str(e))
     except HTTPException:
         raise 
     except DuplicateMobileError as e:

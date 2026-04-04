@@ -7,13 +7,20 @@ class OTPNotFoundError(Exception):
 class ExpiredOTPError(Exception):
     pass
 
+class TooManyAttemptsError(Exception):
+    pass
+
 async def checkOTP(mobile_number, purpose, otp, db_client):
     res = await db_client.table("otp_verifications").select().eq("mobile_number", mobile_number).eq("purpose", purpose).execute()
     if res.data:
         response = res.data[0]
         expires_at = datetime.fromisoformat(response["expires_at"])
-        if (expires_at < datetime.now(timezone.utc) or response["attempt_count"] >= 4): 
+        if (expires_at < datetime.now(timezone.utc)): 
             await delete_existing_otp(mobile_number, db_client)
+            raise ExpiredOTPError("OTP Expired")
+        elif response["attempt_count"] >= 4:
+            await delete_existing_otp(mobile_number, db_client)
+            raise TooManyAttemptsError("Too many attempts")
         elif (response["otp_code"] == otp):
             return True
         else:
