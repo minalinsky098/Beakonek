@@ -6,7 +6,42 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function EarthquakeCard() {
+
+
   const [earthquake, setEarthquake] = useState(null);
+
+    
+    useFocusEffect(
+        useCallback(() => {
+      loadEarthquake();
+      }, []));
+
+
+   const loadEarthquake = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const response = await fetch('https://beakonek.onrender.com/api/v1/recentearthquakes', {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    const data = await response.json();
+    console.log(data);
+    setEarthquake(data);
+    };
+
+
+  
+
+  const formatDate = (sent_at: string) => {
+  const date = new Date(sent_at);
+  return date.toLocaleString('en-PH', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
 
 
   return (
@@ -21,10 +56,10 @@ export default function EarthquakeCard() {
           {earthquake ? `Magnitude ${earthquake.magnitude}` : 'No recent activity'}
         </Text>
         <Text className='text-white mt-1'>
-          {earthquake ? earthquake.location : 'Waiting for updates...'}
+          {earthquake ? earthquake.place : 'Waiting for updates...'}
         </Text>
         <Text className='text-white mt-2'>
-          {earthquake ? earthquake.time : '--:-- --, -- ---- ----'}
+          {earthquake ? formatDate(earthquake.sent_at) : '--:-- --, -- ---- ----'}
         </Text>
       </View>
     </ImageBackground>

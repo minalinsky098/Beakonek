@@ -50,8 +50,30 @@ export default function Menu ()
         console.log(error);
     }
     };
-    return(
-        <View className='p-6 flex-1'>
+
+
+    const simulateEarthquake = async () => {
+    try {
+        const response = await fetch('https://beakonek.onrender.com/api/v1/simulate_earthquakes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            latitude: 10.3157,
+            longitude: 123.8854,
+            earthquake_id: 'test_eq_001',
+            magnitude: 6.7,
+            place: 'Cebu City, Philippines',
+        }),
+        });
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.log(error);
+    }
+    };
+
+        return(
+            <View className='p-6 flex-1'>
             <Text className='font-bold text-2xl'>Menu</Text>
 
             <View className='items-center gap-2'>
@@ -67,6 +89,11 @@ export default function Menu ()
                 </View>
                 <Text className='text-l font-semibold'>{user?.mobile_number?`+63 ${user.mobile_number.slice(2)}`:''}</Text>
             </View>
+
+            <TouchableOpacity onPress={simulateEarthquake}
+            className="bg-[#FF6B2C] p-4 rounded-[25px] mt-4">
+            <Text className="text-center text-white font-bold">Simulate Earthquake</Text>
+            </TouchableOpacity>
             
            
             
