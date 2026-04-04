@@ -33,8 +33,6 @@ export default function IntroScreen()
     });
     const data = await response.json();
     console.log(data);
-    console.log(data);
-    console.log(data);
     setContacts(data);
     };
 
@@ -56,6 +54,9 @@ export default function IntroScreen()
 
 
   const deleteContact =  async (relative_id: string) => {
+
+    setContacts((contacts) => contacts.filter((contact) => contact.relative_id !== relative_id));
+
     try {
       const token = await AsyncStorage.getItem('token');
 
@@ -68,17 +69,19 @@ export default function IntroScreen()
 
           },
         });
+
      const data = await response.json();
      if (!response.ok) {
       console.log('Delete failed:', data);
       return;
      }
      //setContacts(prev => prev.filter(contact => contact.relative_id !== relative_id));
-     await loadContacts();
+
      console.log('Delete succesfully', data);
 
     } catch (error)
     {
+      console.log('bro');
       console.log(error);
     }
   }

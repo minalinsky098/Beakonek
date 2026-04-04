@@ -1,8 +1,9 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { MessageSquare } from 'lucide-react-native';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Swipeable } from 'react-native-gesture-handler';
-import logsData from '@/data/logs.json';
+import { useFocusEffect } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const formatNumber = (number: string) => {
   const digits = number.replace('639', '');
@@ -18,11 +19,54 @@ const formatTime = (sent_at: string) => {
 };
 
 export default function LogsList() {
-  const [logs, setLogs] = useState(logsData);
+  const [logs, setLogs] = useState([]);
 
-  const deleteLog = (log_id: string) => {
-    setLogs(logs.filter((log) => log.log_id !== log_id));
+    useFocusEffect(
+        useCallback(() => {
+      loadLogs();
+      }, []));
+
+
+    const loadLogs = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) return;
+
+      const response = await fetch('https://beakonek.onrender.com/api/v1/logs', {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      setLogs(data);
+    } catch (error) {
+      console.error('Failed to load logs:', error);
+    }
   };
+
+
+
+
+
+  const deleteLog = async (log_id: string) => {
+
+    setLogs((logs) => logs.filter((log) => log.log_id !== log_id));
+
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      await fetch(`https://beakonek.onrender.com/api/logs/${log_id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+    } catch (error) {
+      console.error('Delete failed:', error);
+
+
+  };
+}
 
   const renderRightActions = (log_id: string) => (
     <TouchableOpacity
@@ -54,7 +98,7 @@ export default function LogsList() {
 
               </View>
               <Text className="text-sm">
-                Message has been sent to {log.relative_name} [{formatNumber(log.mobile_number)}].
+                Message has been sent to {log.relative_name}.
               </Text>
 
             </View>

@@ -205,7 +205,7 @@ const handleVerify = async () => {
                 <Text className="text-center">Already have an account?</Text>
             </TouchableOpacity>
 
-              <TouchableOpacity onPress={()=> router.replace('/(tabs)/Home')}
+              <TouchableOpacity onPress={()=> router.replace('/(tabs)/home')}
             className="bg-[#FFFFF] p-5 rounded-[25px] border border-[#737373]">
                 <Text className="text-center">Go to tabs</Text>
             </TouchableOpacity>

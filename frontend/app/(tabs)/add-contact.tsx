@@ -63,7 +63,9 @@ export default function AddContacts ()
           });
           const data = await response.json();
           console.log(data);
+
         } catch (error) {
+          console.log('what')
           console.log(error);
         }
       };
@@ -102,6 +104,7 @@ export default function AddContacts ()
            className="flex-1 p-4"
            value={name}
            onChangeText={setName}
+           maxLength={12}
            />
             </View>
             {nameError ? (
