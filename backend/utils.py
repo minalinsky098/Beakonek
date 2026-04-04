@@ -89,6 +89,12 @@ async def check_earthquakes(db_client):
 async def process_earthquakes(earthquakes, db_client):
     users = await get_users_with_coordinates(db_client)
     all_relatives = await get_all_relatives(db_client) #get all relatives
+    user_relatives = {} 
+    for relative in all_relatives: #map all relatives to each user_id
+        user_id = relative["user_id"]
+        user_relatives.setdefault(user_id, []).append(relative)
+        
+        
     for earthquake in earthquakes:
         try:
             current_time = datetime.now(timezone.utc)
@@ -100,13 +106,7 @@ async def process_earthquakes(earthquakes, db_client):
                 else:
                     continue
             alerted_ids[earthquake_id] = current_time
-            
-            user_relatives = {} 
             affected_relatives = {}
-
-            for relative in all_relatives: #map all relatives to each user_id
-                user_id = relative["user_id"]
-                user_relatives.setdefault(user_id, []).append(relative)
             
             magnitude = earthquake["magnitude"]
             earthquake_lat = earthquake["latitude"]
