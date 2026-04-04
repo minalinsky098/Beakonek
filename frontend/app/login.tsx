@@ -100,6 +100,7 @@ const handleVerify = async () => {
     setShowOtp(false);
     setError("");
     alert("✅ Login Succesful!");
+    console.log(response);
     await AsyncStorage.setItem('token', response["session id"]);
 
     router.replace('/(tabs)/home');
