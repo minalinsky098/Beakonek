@@ -8,6 +8,7 @@ import { ImageBackground } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useEffect, useState } from "react";
 import NetInfo from "@react-native-community/netinfo";
+import '@/tasks/location-task';
 
 
 SystemUI.setBackgroundColorAsync('#3723A9');
@@ -20,16 +21,27 @@ export default function RootLayout() {
   const router = useRouter();
   const [isConnected, setIsConnected] = useState(true);
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      const connected = state.isConnected && state.isInternetReachable;
-      setIsConnected(connected);
-      if (!connected) {
-      router.replace("/offline");}
-      if (connected) {
-      router.replace("/loading");}
-    });
-    return () => unsubscribe();}, []);
+useEffect(() => {
+  let ready = false;
+
+  const unsubscribe = NetInfo.addEventListener(state => {
+    const connected = state.isConnected && state.isInternetReachable;
+    setIsConnected(connected);
+
+    if (!ready) {
+      ready = true;
+      return; // 👈 skip the first immediate fire
+    }
+
+    if (!connected) {
+      router.replace("/offline");
+    } else {
+      router.replace("/");
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
 
   return (
 
@@ -42,9 +54,9 @@ export default function RootLayout() {
         imageStyle={{ opacity: 0.2}}
       >
 
-      <Stack initialRouteName='loading'
+      <Stack initialRouteName='index'
              screenOptions={{
-              animation: 'slide_from_bottom',
+              animation: 'default',
               animationDuration: 500,
             }}
              >
@@ -53,7 +65,7 @@ export default function RootLayout() {
         <Stack.Screen name="signup" options={{headerShown: false}}/>
         <Stack.Screen name="login" options={{headerShown: false}}/>
          <Stack.Screen name="welcome" options={{headerShown: false}}/>
-         <Stack.Screen name="loading" options={{headerShown: false}}/>
+         <Stack.Screen name="index" options={{headerShown: false}}/>
          <Stack.Screen name="offline" options={{headerShown: false}}/>
         
       

@@ -9,17 +9,18 @@ export default function LoadingScreen() {
 useEffect(() => {
   const checkLogin = async () => {
     const token = await AsyncStorage.getItem('token');
-
-    setTimeout(() => {
-      if (token) {
-        router.replace('/(tabs)/home');
-      } else {
-        router.replace('/welcome');
-      }
-    }, 2000);
+    if (token) {
+      router.replace('/(tabs)/home');
+    } else {
+      router.replace('/welcome');
+    }
   };
 
-  checkLogin();
+  const timer = setTimeout(() => {
+    checkLogin();
+  }, 2000);
+
+  return () => clearTimeout(timer); // 👈 cleanup
 }, []);
 
   return (

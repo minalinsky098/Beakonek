@@ -25,7 +25,11 @@ export default function EarthquakeCard() {
     });
     const data = await response.json();
     console.log(data);
-    setEarthquake(data);
+    if (data.detail === "No recent earthquake logs found") {
+          setEarthquake(null);
+        } else {
+          setEarthquake(data);
+        }
     };
 
 

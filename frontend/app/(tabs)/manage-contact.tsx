@@ -147,12 +147,6 @@ export default function IntroScreen()
 
                         <Text className="flex-1 font-semibold">{contact.relative_name}</Text>
 
-                        <TouchableOpacity className="mr-5">
-
-                          <Pencil size={20} color="black" />
-
-                        </TouchableOpacity>
-
                         <TouchableOpacity onPress={() => deleteContact(contact.relative_id)}>
 
                           <Trash2 size={20} color="black" />

@@ -9,8 +9,8 @@ import { useFocusEffect } from '@react-navigation/native';
 
     const colors = ['#3723A9', '#FF6B2C', '#E91E63', '#009688', '#FF5722', '#673AB7', '#2196F3', '#4CAF50'];
     const formatNumber = (number: string) => 
-         {const digits = number.replace('639', '');
-        return `+639 ${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;};
+         {const digits = number.replace('63', '');
+        return `+63 ${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;};
     const getColor = (name: string) => {
     const index = name.charCodeAt(0) % colors.length;
         return colors[index];

@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { OtpInput } from "react-native-otp-entry";
 
-export default function Otp({ visible, onClose, otp, setOtp, error, onVerify }) {
+export default function Otp({ visible, onClose, otp, setOtp, error, onVerify, onResend }) {
   return (
     <Modal
       visible={visible}
@@ -42,7 +42,7 @@ export default function Otp({ visible, onClose, otp, setOtp, error, onVerify }) 
           ) : null}
 
           <TouchableOpacity
-            onPress={onClose}>
+            onPress={onResend}>
             <Text className="text-black underline text-center mt-4">Resend Code?</Text>
           </TouchableOpacity>
 

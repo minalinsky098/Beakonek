@@ -124,7 +124,7 @@ const handleVerify = async () => {
                   />
                   <Image 
                   source={require('../assets/images/logo.png')}
-                  className="absolute w-50 h-50"
+                  style={{width: 200, height: 200}}
                   />
               </View>
 
@@ -138,7 +138,7 @@ const handleVerify = async () => {
                 <View className="flex-row items-center bg-[#D9D9D9] rounded-[8px] border border-[#737373] mb-3">
                 <Text className="p-4 text-black border-r border-[#737373]">+63</Text>
                 <TextInput
-                placeholder="XXXXXXXXX"
+                placeholder="9XXXXXXXX"
                 className="flex-1 p-4"
                 keyboardType="phone-pad"
                 maxLength={10}
@@ -178,7 +178,8 @@ const handleVerify = async () => {
                otp={otp}
                setOtp={setOtp}
                error={error}
-               onVerify={handleVerify}/>
+               onVerify={handleVerify}
+               onResend={phoneverification}/>
 
              <TouchableOpacity onPress={()=> router.replace('/signup')}
             className="bg-[#FFFFF] p-5 rounded-[25px] border border-[#737373]">

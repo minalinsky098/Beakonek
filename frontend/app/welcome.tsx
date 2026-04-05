@@ -15,7 +15,7 @@ export default function IntroScreen()
        <View className="flex-[6] justify-end items-center">
      <Image 
                 source={require('../assets/images/logo.png')}
-                  className="absolute w-50 h-50"
+                  style={{width: 200, height: 200}}
                   />
     </View>
     <View className="flex-[3] justify-end items-center">

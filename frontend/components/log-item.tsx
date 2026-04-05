@@ -6,8 +6,8 @@ import { useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const formatNumber = (number: string) => {
-  const digits = number.replace('639', '');
-  return `+639 ${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
+  const digits = number.replace('63', '');
+  return `+63 ${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
 };
 
 const formatTime = (sent_at: string) => {
@@ -20,10 +20,12 @@ const formatTime = (sent_at: string) => {
 
 export default function LogsList() {
   const [logs, setLogs] = useState([]);
+  const [contacts, setContacts] = useState([]);
 
     useFocusEffect(
         useCallback(() => {
       loadLogs();
+      loadContacts();
       }, []));
 
 
@@ -76,11 +78,29 @@ export default function LogsList() {
     </TouchableOpacity>
   );
 
+
+  
+  const loadContacts = async () => {
+  const token = await AsyncStorage.getItem('token');
+  const response = await fetch('https://beakonek.onrender.com/api/v1/relatives', {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    const data = await response.json();
+    console.log(data);
+    setContacts(data);
+    };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
 
       {logs.length > 0 ? (
-        logs.map((log) => (
+        logs.map((log) => { 
+          const contact = contacts.find(c => c.relative_name === log.relative_name);
+          const number = contact?.mobile_number ? formatNumber(contact.mobile_number) : '';
+
+          
+          return (
           <Swipeable
             key={log.log_id}
             renderRightActions={() => renderRightActions(log.log_id)}>
@@ -98,14 +118,14 @@ export default function LogsList() {
 
               </View>
               <Text className="text-sm">
-                Message has been sent to {log.relative_name}.
+                Message has been sent to {log.relative_name} {number}.
               </Text>
 
             </View>
 
 
           </Swipeable>
-        ))
+        )})
       ) : (
 
         <View className="items-center justify-center py-10">
