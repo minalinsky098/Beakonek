@@ -77,6 +77,9 @@ pip install -r requirements.txt
 4.	Integrate SMS functionality for use by NGOs and emergency responders. 
 5.	Improve the home screen by adding a log of past earthquakes and dedicated tab for managing contacts.
 
+## Artificial Intelligence (AI) Usage
+Used ChatGPT, Claude Code, and Copilot for debugging, looking for packages and libraries, summarizing package/API documentation.
+
 ## Team Contributions
 ### UI/UX Designer
 1. Gerald Arambulo
