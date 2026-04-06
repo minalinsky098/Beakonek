@@ -28,7 +28,8 @@ last_poll_time = None
 # adds a new user after sign up
 async def handle_registration(payload, db_client):
     await add_user_to_database(payload.mobile_number,payload.first_name,payload.last_name, db_client)
-    return JSONResponse(status_code = 201, content = {"detail": "User is registered"})
+    session_id = await create_session(payload.mobile_number, db_client)
+    return JSONResponse(status_code = 201, content = {"detail": "User is registered", "session id": session_id})
 
 # logs out the old session and starts a new one for this user
 async def handle_login(payload, db_client):
