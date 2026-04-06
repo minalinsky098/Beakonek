@@ -104,6 +104,7 @@ async def process_earthquakes(earthquakes, db_client):
                     del alerted_ids[earthquake_id]
                 else:
                     continue
+            print(f"Earthquake with {earthquake_id} is logged")
             alerted_ids[earthquake_id] = current_time
             affected_relatives = {}
             
