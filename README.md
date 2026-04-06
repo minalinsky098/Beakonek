@@ -13,7 +13,7 @@ Specifically, the application aims to:
 
 
 ## Scope and Limitation
-The scope of the study focuses on the implementation of Beakonek within the Philippines, especially in areas with low connectivity. The system is designed to operate using telecommunications networks such as Globe and DITO, ensuring that emergency contacts of users in affected regions can receive earthquake alerts through SMS-based communication despite limited internet access. In addition, Haversine formula is used to calculate the distance of the user from the earthquake epicenter.
+The scope of the app focuses on the implementation of Beakonek within the Philippines, especially in areas with low connectivity. The app is designed to operate using telecommunications networks such as Globe and DITO, ensuring that emergency contacts of users in affected regions can receive earthquake alerts through SMS-based communication despite limited internet access. In addition, Haversine formula is used to calculate the distance of the user from the earthquake epicenter.
 
 The application depends on data from the United States Geological Survey (USGS), drawn from existing literature, which is not specifically tailored to Philippine seismic conditions. Furthermore, due to financial constraints, iOS and Smart Network users are not supported, as PhilSMS requires a ₱1000 fee for a sender ID, while Apple requires a developer account costing $100 per year.
 
