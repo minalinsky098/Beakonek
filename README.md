@@ -26,7 +26,7 @@ Beakonek aims to solve this with a simple mobile experience focused on trust, sp
 
 - Sign up and log in using OTP verification.
 - Store and manage emergency contacts/relatives.
-- Update user location data.
+- Update user location data using GPS.
 
 ## How It Works 
 
